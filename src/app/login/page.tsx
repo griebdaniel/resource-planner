@@ -1,33 +1,34 @@
 "use client";
 
-import { MouseEvent } from "react";
 import { authenticate } from "@/actions/user";
-import { useFormState, useFormStatus } from "react-dom";
+import { Button, Input } from "@nextui-org/react";
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
 export default function Page() {
-  const [errorMessage, dispatch] = useFormState(authenticate, undefined);
+  const router = useRouter();
 
-  return (
-    <form action={dispatch}>
-      <input type="email" name="email" placeholder="Email" required />
-      <input type="password" name="password" placeholder="Password" required />
-      <LoginButton />
-    </form>
-  );
-}
+  const auth = async (formData: FormData) => {
+    const username = formData.get("username") as string;
+    const password = formData.get("password") as string;
 
-function LoginButton() {
-  const { pending } = useFormStatus();
-
-  const handleClick = (event: MouseEvent) => {
-    if (pending) {
-      event.preventDefault();
+    const res = await authenticate(username, password);
+    if (res?.role === "admin") {
+      router.push("/admin/dashboard/users");
+    } else if (res?.role === "user") {
+      router.push("/user/dashboard");
+    } else {
+      toast("Incorrect credentials", {
+        type: "error",
+        position: "bottom-center",
+      });
     }
   };
-
   return (
-    <button aria-disabled={pending} type="submit" onClick={handleClick}>
-      Login
-    </button>
+    <form action={auth} className="flex flex-col gap-2 p-5">
+      <Input name="username" placeholder="Username" />
+      <Input type="password" name="password" placeholder="Password" />
+      <Button type="submit">Login</Button>
+    </form>
   );
 }

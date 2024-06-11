@@ -27,10 +27,6 @@ export default function TableRowDialog({
 }: TableRowDialogProps) {
   const [formData, setFormData] = useState<Record<string, unknown>>(row);
 
-  useEffect(() => {
-    setFormData(row);
-  }, [row]);
-
   const handleChange = (key: string, value: unknown) => {
     setFormData((prev) => ({ ...prev, [key]: value }));
   };
