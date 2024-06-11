@@ -1,5 +1,4 @@
 import { Button } from "@nextui-org/react";
-import { TableColumn, TableConfiguration } from "./data-table";
 import { DeleteIcon, EditIcon } from "lucide-react";
 
 interface ActionCellContentProps {
@@ -17,7 +16,7 @@ export const ActionCellContent: React.FC<ActionCellContentProps> = ({
         <DeleteIcon />
       </Button>
       <Button isIconOnly>
-        <DeleteIcon />
+        <EditIcon />
       </Button>
     </div>
   );
